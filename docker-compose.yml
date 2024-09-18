@@ -1,0 +1,50 @@
+services:
+  rabbitmq:
+    image: rabbitmq:3-management  # RabbitMQ with management interface
+    ports:
+      - "5672:5672"   # RabbitMQ port for messaging
+      - "15672:15672" # Management interface port (optional)
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "status"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
+    environment:
+      RABBITMQ_LOGS: "/dev/null"
+      RABBITMQ_LOG_LEVEL: "none"
+  
+  python-consumer:
+    build:
+      context: ./python-consumer  # Directory containing the Python Dockerfile
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    environment:
+      - RABBITMQ_HOST=rabbitmq
+    restart: always  # Automatically restart the container if it crashes
+    links:
+      - rabbitmq
+
+
+  java-producer:
+    build:
+      context: ./java-producer  # Directory containing the Java Dockerfile
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    environment:
+      - RABBITMQ_HOST=rabbitmq  # Use the service name as the RabbitMQ host
+    links:
+      - rabbitmq
+
+  python-producer:
+    build:
+      context: ./python-producer  # Directory containing the Java Dockerfile
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    environment:
+      - RABBITMQ_HOST=rabbitmq  # Use the service name as the RabbitMQ host
+    links:
+      - rabbitmq
