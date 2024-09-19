@@ -25,7 +25,8 @@ services:
     restart: always  # Automatically restart the container if it crashes
     links:
       - rabbitmq
-
+    volumes:
+      - ./shared-data:/shared
 
   java-producer:
     build:
@@ -48,3 +49,9 @@ services:
       - RABBITMQ_HOST=rabbitmq  # Use the service name as the RabbitMQ host
     links:
       - rabbitmq
+    volumes:
+      - ./shared-data:/shared
+
+
+volumes:
+  shared-data:

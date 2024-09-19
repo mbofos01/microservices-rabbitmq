@@ -11,6 +11,7 @@ COPY . /app
 
 # Install the pika library
 RUN pip install pika
+RUN pip install Pillow
 
 # Specify the command to run on container start
 ENTRYPOINT ["python", "/app/receiver.py"]

@@ -13,7 +13,9 @@ public class Send {
       Channel channel = connection.createChannel();
       channel.queueDeclare(QUEUE_NAME, false, false, false, null);
 
-      String message = "Hello World from Java!";
+      // String message = "/shared/geko.jpg"; //"Hello World from Java!";
+      String message = "{\"image_path\": \"/shared/geko.jpg\", \"size\": \"200\"}";
+
       channel.basicPublish("", QUEUE_NAME, null, message.getBytes());
       System.out.println(" [x] Sent '" + message + "'");
 

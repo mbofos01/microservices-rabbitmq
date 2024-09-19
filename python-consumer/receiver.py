@@ -1,10 +1,17 @@
 import pika
 import time
+import json
+from image_edit import save_image_center
 
 TIMEOUT_SECONDS=10
 
 def callback(ch, method, properties, body):
-    print(f" [Y] Received message: {body.decode().upper()}")
+    message = json.loads(body)
+    image_path = message['image_path']
+    crop_width = int(message['size'])
+
+    print(f" [Y] Received message: {image_path.upper()}")
+    save_image_center(image_path, crop_width=crop_width)
 
 # Retry logic in case RabbitMQ is not ready yet
 while True:
