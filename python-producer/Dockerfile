@@ -11,6 +11,9 @@ COPY . /app
 
 # Install pika for RabbitMQ communication
 RUN pip install pika
+RUN pip install flask
+RUN pip install flask-restx
 
 # Specify the command to run on container start
-ENTRYPOINT ["python", "/app/producer.py"]
+# ENTRYPOINT ["python", "/app/producer.py"]
+ENTRYPOINT [ "flask", "run", "--host=0.0.0.0", "--debug" ]

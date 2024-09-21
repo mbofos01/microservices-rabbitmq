@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Gallery</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        .gallery {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .image-pair {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 15px;
+        }
+
+        img {
+            max-width: 300px;
+            margin: 5px;
+        }
+
+        .pair {
+            display: flex;
+            justify-content: center;
+        }
+
+        .pair img {
+            margin: 0 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Image Gallery</h1>
+    <div class="gallery">
+        {% for base_name, images in image_pairs.items() %}
+        <div class="image-pair">
+            <h2>{{ base_name }}</h2>
+            <div class="pair">
+                {% if images[0] %}
+                <img src="{{ url_for('send_shared_file', filename=images[0]) }}" alt="{{ base_name }}">
+                {% endif %}
+                {% if images[1] %}
+                <img src="{{ url_for('send_shared_file', filename=images[1]) }}" alt="{{ base_name }} Centered">
+                {% endif %}
+            </div>
+        </div>
+        <br>
+        {% endfor %}
+    </div>
+</body>
+
+</html>

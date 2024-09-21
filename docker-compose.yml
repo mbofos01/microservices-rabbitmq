@@ -41,12 +41,15 @@ services:
 
   python-producer:
     build:
-      context: ./python-producer  # Directory containing the Java Dockerfile
+      context: ./python-producer  # Directory containing the Python Dockerfile
+    ports:
+      - "5000:5000"
     depends_on:
       rabbitmq:
         condition: service_healthy
     environment:
       - RABBITMQ_HOST=rabbitmq  # Use the service name as the RabbitMQ host
+      - FLASK_ENV=development
     links:
       - rabbitmq
     volumes:
