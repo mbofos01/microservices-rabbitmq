@@ -1,4 +1,5 @@
 from PIL import Image
+import os
 
 # Function to get and save the center of the image
 def save_image_center(image_path, crop_width=200):
@@ -24,10 +25,10 @@ def save_image_center(image_path, crop_width=200):
     # Crop the image to the center area with respect to aspect ratio
     center_image = image.crop((left, top, right, bottom))
 
-    # Save the center crop to a new file
-    output_path = image_path.replace(".jpg", "_center.jpg")
+    file_root, file_ext = os.path.splitext(image_path)
+    output_path = f"{file_root}_center{file_ext}"
     center_image.save(output_path)
-
+    
     print(f"Center of the image saved as {output_path} with aspect ratio preserved.")
     return output_path
 

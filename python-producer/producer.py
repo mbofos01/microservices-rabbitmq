@@ -1,7 +1,7 @@
 import pika
 import json
 
-def main():
+def cut_image(path, size=400):
     # Connect to RabbitMQ server
     connection = pika.BlockingConnection(pika.ConnectionParameters('rabbitmq'))
     channel = connection.channel()
@@ -9,14 +9,10 @@ def main():
     # Declare a queue
     channel.queue_declare(queue='some_queue')
 
-    # Publish a message
-    # message = "/shared/mntn.jpg" #"Hello World from Python!".
-
     message = {
-        'image_path': "/shared/mntn.jpg",
-        'size': 800
+        'image_path': path,
+        'size': size
     }
-
 
     channel.basic_publish(exchange='', routing_key='some_queue', body=json.dumps(message))
     print(f" [x] Sent '{message}'")
@@ -25,4 +21,4 @@ def main():
     connection.close()
 
 if __name__ == "__main__":
-    main()
+    cut_image(path="/shared/mntn.jpg", size=800)
