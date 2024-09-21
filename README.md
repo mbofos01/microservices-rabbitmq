@@ -10,6 +10,12 @@ At this point we assume that the user has uploaded an image and it is located at
 
 The full path of said image and the width we want our image to have is passed through the queue at a JSON format.
 
+### Swagger API UI
+![Swagger API UI](readme_images/swagger.png)
+
+### Image Gallery
+![Image Gallery](readme_images/gallery.png)
+
 ## Image Editor (Consumer)
 
 Our microservice consumes the queue and edits the image we passed.
