@@ -6,8 +6,7 @@ from markupsafe import escape
 import os
 from producer import cut_image
 from flask import send_from_directory
-
-
+from PIL import Image
 
 app = Flask(__name__)
 api = Api(app, version='1.0', title='Image Upload API',
@@ -43,17 +42,24 @@ class Talk(Resource):
 # Define the path to the shared directory
 SHARED_FOLDER = '/shared'
 
+def is_image(file_path):
+    try:
+        Image.open(file_path)
+        return True
+    except IOError:
+        return False
+
 @app.route('/display')
 def index():
     # List all images in the shared directory
-    images = [f for f in os.listdir(SHARED_FOLDER) if f.endswith(('.jpg', '.png'))]
+    images = [f for f in os.listdir(SHARED_FOLDER) if is_image(os.path.join(SHARED_FOLDER, f))]
     
     # Create a list to hold image pairs
     image_pairs = {}
     
     for image in images:
         # Check for centered version
-        if image.endswith('_center.jpg') or image.endswith('_center.png'):
+        if image.endswith('_center'):
             base_name = image[:-len('_center')]
             if base_name not in image_pairs:
                 image_pairs[base_name] = [None, None]  # [normal, centered]
