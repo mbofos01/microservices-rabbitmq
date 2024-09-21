@@ -4,13 +4,13 @@ services:
     ports:
       - "5672:5672"   # RabbitMQ port for messaging
       - "15672:15672" # Management interface port (optional)
-    healthcheck:
+    healthcheck: # Check if RabbitMQ is ready to accept connections
       test: ["CMD", "rabbitmq-diagnostics", "status"]
       interval: 10s
       retries: 5
       start_period: 30s
       timeout: 10s
-    environment:
+    environment: # Disable logging
       RABBITMQ_LOGS: "/dev/null"
       RABBITMQ_LOG_LEVEL: "none"
   
@@ -19,7 +19,7 @@ services:
       context: ./python-consumer  # Directory containing the Python Dockerfile
     depends_on:
       rabbitmq:
-        condition: service_healthy
+        condition: service_healthy # Wait for RabbitMQ to be ready
     environment:
       - RABBITMQ_HOST=rabbitmq
     restart: always  # Automatically restart the container if it crashes
@@ -33,7 +33,7 @@ services:
       context: ./java-producer  # Directory containing the Java Dockerfile
     depends_on:
       rabbitmq:
-        condition: service_healthy
+        condition: service_healthy # Wait for RabbitMQ to be ready
     environment:
       - RABBITMQ_HOST=rabbitmq  # Use the service name as the RabbitMQ host
     links:
@@ -43,10 +43,10 @@ services:
     build:
       context: ./python-producer  # Directory containing the Python Dockerfile
     ports:
-      - "5000:5000"
+      - "5000:5000" # Expose the Flask web server port
     depends_on:
       rabbitmq:
-        condition: service_healthy
+        condition: service_healthy # Wait for RabbitMQ to be ready
     environment:
       - RABBITMQ_HOST=rabbitmq  # Use the service name as the RabbitMQ host
       - FLASK_ENV=development
@@ -55,6 +55,6 @@ services:
     volumes:
       - ./shared-data:/shared
 
-
+# Define a volume to share data between containers
 volumes:
   shared-data:
