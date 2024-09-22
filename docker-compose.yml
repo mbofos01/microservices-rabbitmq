@@ -22,7 +22,11 @@ services:
         condition: service_healthy # Wait for RabbitMQ to be ready
     environment:
       - RABBITMQ_HOST=rabbitmq
-    restart: always  # Automatically restart the container if it crashes
+    restart: on-failure  # Restart the container only on failure
+    deploy:
+      restart_policy:
+        condition: on-failure
+        max_attempts: 5  # Restart only 5 times if it fails
     links:
       - rabbitmq
     volumes:
