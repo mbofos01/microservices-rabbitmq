@@ -25,12 +25,14 @@ class UploadImage(Resource):
         uploaded_file = args['file']  # Get the uploaded file as a FileStorage object
         
         if uploaded_file.filename == '':
+            app.logger.info(f"Someting went wrong with the file upload")
             return {"error": "No file selected"}, 400
         
         # Save the file in the uploads directory
         uploaded_file.save(f"/shared/{uploaded_file.filename}")
         cut_image(path=f"/shared/{uploaded_file.filename}")
         
+        app.logger.info(f"File {uploaded_file.filename} uploaded successfully")
         return {"message": "File successfully uploaded"}, 201
     
 @api.route('/talk')
