@@ -9,9 +9,8 @@ WORKDIR /app
 # Copy the current directory contents into the container at /app
 COPY . /app
 
-# Install the pika library
-RUN pip install pika
-RUN pip install Pillow
+# Install required dependencies
+RUN pip install -r /app/requirements.txt
 
 # Specify the command to run on container start
 ENTRYPOINT ["python", "/app/receiver.py"]
